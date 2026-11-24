@@ -19,7 +19,8 @@ APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/con
 APP_FILES=(
   main.py action_library.py action_widgets.py automation_editor_window.py
   automation_engine.py automation_widgets.py dialogs.py editor_window.py
-  main_window.py models.py plugin_api.py plugin_manager.py plugins_window.py
+  icons.py main_window.py models.py plugin_api.py plugin_manager.py plugin_store.py
+  plugin_store_window.py plugins_window.py
   run_engine.py runner.py storage.py system_actions.py trigger_library.py
   style.css
 )
@@ -31,6 +32,7 @@ verify_source() {
   for f in "${APP_FILES[@]}"; do
     [ -f "$SRC_DIR/$f" ] || die "missing source file: $f (expected next to build.sh)"
   done
+  [ -d "$SRC_DIR/icons/hicolor/scalable/actions" ] || die "missing icons/ (run: python3 tools/make_icons.py)"
 }
 
 write_launcher() {
@@ -203,6 +205,7 @@ build_tarball() {
   for f in "${APP_FILES[@]}"; do
     cp "$SRC_DIR/$f" "$pkg_dir/app/$f"
   done
+  cp -r "$SRC_DIR/icons" "$pkg_dir/app/icons"
   write_launcher "$pkg_dir/run.sh"
 
   mkdir -p "$DIST_DIR"
@@ -232,6 +235,7 @@ build_appimage() {
   for f in "${APP_FILES[@]}"; do
     cp "$SRC_DIR/$f" "$appdir/app/$f"
   done
+  cp -r "$SRC_DIR/icons" "$appdir/app/icons"
   write_launcher "$appdir/AppRun"
   write_desktop_file "$appdir/$APP_NAME.desktop"
   cp "$appdir/$APP_NAME.desktop" "$appdir/usr/share/applications/$APP_NAME.desktop"
