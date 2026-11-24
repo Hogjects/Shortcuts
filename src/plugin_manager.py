@@ -19,7 +19,7 @@ PLUGINS_DIR = os.path.join(CONFIG_DIR, "plugins")
 STATE_PATH = os.path.join(PLUGINS_DIR, "_state.json")
 
 _ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
-_DEFAULT_CATEGORY_ICON = "application-x-addon-symbolic"
+_DEFAULT_CATEGORY_ICON = "sc-puzzle-symbolic"
 
 
 class PluginError(Exception):

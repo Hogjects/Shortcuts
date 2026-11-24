@@ -3,8 +3,10 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Pango
 
+import icons
 import plugin_manager
 from dialogs import show_confirm_dialog, show_message_dialog
+from plugin_store_window import StoreWindow
 
 
 class PluginsWindow(Gtk.Window):
@@ -51,6 +53,10 @@ class PluginsWindow(Gtk.Window):
         title.set_xalign(0.0)
         header.append(title)
 
+        browse_btn = Gtk.Button(label="Browse\u2026")
+        browse_btn.connect("clicked", lambda b: self._on_browse())
+        header.append(browse_btn)
+
         import_btn = Gtk.Button(label="Import Plugin\u2026")
         import_btn.add_css_class("suggested-action")
         import_btn.connect("clicked", lambda b: self._on_import())
@@ -71,7 +77,7 @@ class PluginsWindow(Gtk.Window):
 
         plugins = plugin_manager.list_installed()
         if not plugins:
-            empty = Gtk.Label(label="No plugins installed yet. Import a .zip to add more actions.")
+            empty = Gtk.Label(label="No plugins installed yet. Browse the catalog or import a .zip to add more actions.")
             empty.add_css_class("empty-state")
             empty.set_xalign(0.0)
             self._list_box.append(empty)
@@ -105,7 +111,7 @@ class PluginsWindow(Gtk.Window):
         top.append(switch)
 
         remove_btn = Gtk.Button()
-        remove_btn.set_icon_name("user-trash-symbolic")
+        icons.set_button_icon(remove_btn, "sc-trash-symbolic")
         remove_btn.set_has_frame(False)
         remove_btn.add_css_class("step-icon-button")
         remove_btn.set_tooltip_text("Remove")
@@ -136,6 +142,13 @@ class PluginsWindow(Gtk.Window):
             card.append(desc)
 
         return card
+
+    def _on_browse(self):
+        StoreWindow(self, self._on_store_changed).present()
+
+    def _on_store_changed(self):
+        self._refresh()
+        self.on_changed()
 
     def _on_toggle(self, plugin_id, enabled):
         error = plugin_manager.set_enabled(plugin_id, enabled)

@@ -6,6 +6,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gio, Gdk
 
+import icons
 from main_window import MainWindow
 
 APP_ID = "com.local.shortcuts"
@@ -22,6 +23,7 @@ class ShortcutsApp(Gtk.Application):
         settings = Gtk.Settings.get_default()
         if settings is not None:
             settings.set_property("gtk-application-prefer-dark-theme", False)
+        icons.setup()
         self._load_css()
 
     def do_activate(self):

@@ -5,6 +5,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk
 
+import icons
 import system_actions
 import trigger_library
 
@@ -18,12 +19,12 @@ TRIGGER_KINDS = [
 ]
 
 TRIGGER_ICONS = {
-    "time": "alarm-symbolic",
-    "wifi": "network-wireless-symbolic",
-    "bluetooth": "bluetooth-active-symbolic",
-    "battery": "battery-good-symbolic",
-    "sleep_wake": "weather-clear-night-symbolic",
-    "startup": "system-run-symbolic",
+    "time": "sc-alarm-symbolic",
+    "wifi": "sc-wifi-symbolic",
+    "bluetooth": "sc-bluetooth-symbolic",
+    "battery": "sc-battery-symbolic",
+    "sleep_wake": "sc-sleep-wake-symbolic",
+    "startup": "sc-startup-symbolic",
 }
 
 TRIGGER_COLORS = {
@@ -53,7 +54,7 @@ def trigger_icon_name(trigger_type):
     if trigger_type in TRIGGER_ICONS:
         return TRIGGER_ICONS[trigger_type]
     ttype = trigger_library.get_trigger_type(trigger_type)
-    return ttype.icon_name if ttype else "system-run-symbolic"
+    return ttype.icon_name if ttype else "sc-startup-symbolic"
 
 
 def trigger_color_class(trigger_type):
@@ -84,12 +85,16 @@ def _build_trigger_block_row(kind_id, kind_name, icon_name, color_class, on_choo
     box.set_margin_start(6)
     box.set_margin_end(6)
 
-    swatch = Gtk.Box()
+    swatch = Gtk.CenterBox()  # centres the icon in the fixed-size square without expanding
     swatch.add_css_class("library-row-swatch")
     swatch.add_css_class(color_class)
-    icon = Gtk.Image.new_from_icon_name(icon_name)
-    icon.set_pixel_size(15)
-    swatch.append(icon)
+    swatch.set_halign(Gtk.Align.START)
+    swatch.set_hexpand(False)
+    swatch.set_valign(Gtk.Align.CENTER)
+    icon = icons.image(icon_name, 15)
+    icon.set_halign(Gtk.Align.CENTER)
+    icon.set_valign(Gtk.Align.CENTER)
+    swatch.set_center_widget(icon)
     box.append(swatch)
 
     label = Gtk.Label(label=kind_name)
@@ -138,8 +143,7 @@ def _show_trigger_picker(anchor_widget, on_choose):
 def _build_trigger_header(automation, on_kind_chosen):
     header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-    icon = Gtk.Image.new_from_icon_name(trigger_icon_name(automation.trigger_type))
-    icon.set_pixel_size(16)
+    icon = icons.image(trigger_icon_name(automation.trigger_type), 16)
     header.append(icon)
 
     name = Gtk.Label(label=f"When {_trigger_display_name(automation.trigger_type)}")

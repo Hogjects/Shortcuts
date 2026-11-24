@@ -3,9 +3,10 @@ import shutil
 import gi
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gdk, GObject, Gtk
+from gi.repository import Gdk, GLib, GObject, Gtk
 
 import action_library as lib
+import icons
 from models import ParamValue
 
 def build_library_row(action_type, on_click):
@@ -19,17 +20,22 @@ def build_library_row(action_type, on_click):
     box.set_margin_start(6)
     box.set_margin_end(6)
 
-    swatch = Gtk.Box()
+    swatch = Gtk.CenterBox()  # centres the icon in the fixed-size square without expanding
     swatch.add_css_class("library-row-swatch")
     swatch.add_css_class(action_type.color_class)
-    icon = Gtk.Image.new_from_icon_name(action_type.icon_name)
-    icon.set_pixel_size(15)
-    swatch.append(icon)
+    swatch.set_halign(Gtk.Align.START)
+    swatch.set_hexpand(False)
+    swatch.set_valign(Gtk.Align.CENTER)
+    icon = icons.image(action_type.icon_name, 15)
+    icon.set_halign(Gtk.Align.CENTER)
+    icon.set_valign(Gtk.Align.CENTER)
+    swatch.set_center_widget(icon)
     box.append(swatch)
 
     label = Gtk.Label(label=action_type.name)
     label.set_xalign(0.0)
     label.set_hexpand(True)
+    label.set_valign(Gtk.Align.CENTER)
     box.append(label)
 
     if action_type.required_command and not shutil.which(action_type.required_command):
@@ -108,6 +114,42 @@ def show_action_picker(anchor_widget, on_choose):
     popover.popup()
 
 
+def _install_app_icon_factory(dropdown):
+    """Show each installed app's own icon next to its name, both in the
+    closed dropdown and in its popup list, and make the list searchable."""
+    factory = Gtk.SignalListItemFactory()
+
+    def on_setup(_f, list_item):
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        app_img = icons.image(icons.FALLBACK_APP_ICON, 18)
+        app_img.set_valign(Gtk.Align.CENTER)
+        box.append(app_img)
+        label = Gtk.Label(xalign=0.0)
+        label.set_valign(Gtk.Align.CENTER)
+        label.set_ellipsize(3)  # Pango.EllipsizeMode.END
+        box.append(label)
+        list_item.set_child(box)
+
+    def on_bind(_f, list_item):
+        box = list_item.get_child()
+        name = list_item.get_item().get_string()
+        gicon = icons.app_gicon(name)
+        img = box.get_first_child()
+        if gicon is not None:
+            img.set_from_gicon(gicon)
+        else:
+            img.set_from_icon_name(icons.FALLBACK_APP_ICON)
+        img.set_pixel_size(18)
+        box.get_last_child().set_label(name)
+
+    factory.connect("setup", on_setup)
+    factory.connect("bind", on_bind)
+    dropdown.set_factory(factory)
+    dropdown.set_list_factory(factory)
+    dropdown.set_enable_search(True)
+    dropdown.set_expression(Gtk.PropertyExpression.new(Gtk.StringObject, None, "string"))
+
+
 def _make_field_control(spec, param_value, on_literal_changed):
     if spec.type == "number":
         adjustment = Gtk.Adjustment(lower=spec.min_value, upper=spec.max_value, step_increment=1)
@@ -137,6 +179,8 @@ def _make_field_control(spec, param_value, on_literal_changed):
             values = labels = list(raw) or [""]
 
         widget = Gtk.DropDown(model=Gtk.StringList.new(labels))
+        if spec.app_icons:
+            _install_app_icon_factory(widget)
         try:
             idx = values.index(param_value.value)
         except ValueError:
@@ -168,6 +212,10 @@ def build_param_row(spec, step, editor):
 
     def set_literal(value):
         step.params[spec.key] = ParamValue.literal(value)
+        if spec.app_icons:
+            # step header shows the chosen app's own icon; defer so the dropdown
+            # isn't torn down inside its own signal handler
+            GLib.idle_add(lambda: (editor.request_refresh(), False)[1])
 
     def render_slot():
         child = slot.get_first_child()
@@ -180,7 +228,11 @@ def build_param_row(spec, step, editor):
         step.params[spec.key] = pv
 
         if pv.kind == "variable":
-            chip = Gtk.Button(label=f"\u25c6 {pv.name}")
+            chip = Gtk.Button()
+            chip_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+            chip_box.append(icons.image("sc-variable-symbolic", 13))
+            chip_box.append(Gtk.Label(label=pv.name))
+            chip.set_child(chip_box)
             chip.add_css_class("variable-chip")
             chip.set_tooltip_text("Click to replace with a typed value")
 
@@ -199,7 +251,7 @@ def build_param_row(spec, step, editor):
 
     if spec.type in ("text", "number"):
         var_btn = Gtk.MenuButton()
-        var_btn.set_icon_name("insert-link-symbolic")
+        icons.set_button_icon(var_btn, "sc-variable-symbolic")
         var_btn.add_css_class("variable-toggle")
         var_btn.set_has_frame(False)
         var_btn.set_tooltip_text("Insert a variable")
@@ -240,8 +292,8 @@ def build_param_row(spec, step, editor):
 def _step_header(step, action_type, editor, steps_list, frame):
     header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
-    grip = Gtk.Image.new_from_icon_name("list-drag-handle-symbolic")
-    grip.set_pixel_size(16)
+    grip = icons.image("sc-grip-symbolic", 16)
+    grip.set_valign(Gtk.Align.CENTER)
     grip.set_margin_end(2)
     grip.add_css_class("step-drag-handle")
     grip.set_tooltip_text("Drag to reorder")
@@ -271,22 +323,24 @@ def _step_header(step, action_type, editor, steps_list, frame):
     card_drag.connect("drag-end", on_drag_end)
     frame.add_controller(card_drag)
 
-    icon = Gtk.Image.new_from_icon_name(action_type.icon_name)
-    icon.set_pixel_size(16)
+    icon = icons.image(icons.step_icon_name(step, action_type), 16)
+    icon.set_valign(Gtk.Align.CENTER)
     header.append(icon)
 
     name = Gtk.Label(label=action_type.name)
     name.add_css_class("step-title")
     name.set_xalign(0.0)
     name.set_hexpand(True)
+    name.set_valign(Gtk.Align.CENTER)
     header.append(name)
 
     idx = steps_list.index(step)
 
     up_btn = Gtk.Button()
-    up_btn.set_icon_name("go-up-symbolic")
+    icons.set_button_icon(up_btn, "sc-go-up-symbolic")
     up_btn.set_has_frame(False)
     up_btn.add_css_class("step-icon-button")
+    up_btn.set_valign(Gtk.Align.CENTER)
     up_btn.set_tooltip_text("Move up")
     up_btn.set_sensitive(idx > 0)
     up_btn.connect("clicked", lambda b: (
@@ -294,9 +348,10 @@ def _step_header(step, action_type, editor, steps_list, frame):
     header.append(up_btn)
 
     down_btn = Gtk.Button()
-    down_btn.set_icon_name("go-down-symbolic")
+    icons.set_button_icon(down_btn, "sc-go-down-symbolic")
     down_btn.set_has_frame(False)
     down_btn.add_css_class("step-icon-button")
+    down_btn.set_valign(Gtk.Align.CENTER)
     down_btn.set_tooltip_text("Move down")
     down_btn.set_sensitive(idx < len(steps_list) - 1)
     down_btn.connect("clicked", lambda b: (
@@ -304,9 +359,10 @@ def _step_header(step, action_type, editor, steps_list, frame):
     header.append(down_btn)
 
     del_btn = Gtk.Button()
-    del_btn.set_icon_name("user-trash-symbolic")
+    icons.set_button_icon(del_btn, "sc-trash-symbolic")
     del_btn.set_has_frame(False)
     del_btn.add_css_class("step-icon-button")
+    del_btn.set_valign(Gtk.Align.CENTER)
     del_btn.set_tooltip_text("Delete step")
     del_btn.connect("clicked", lambda b: (steps_list.remove(step), editor.request_refresh()))
     header.append(del_btn)

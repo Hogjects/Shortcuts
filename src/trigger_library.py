@@ -22,7 +22,7 @@ class TriggerType:
     describe: Optional[Callable] = None
 
 
-_DEFAULT_PLUGIN_CATEGORY_ICON = "application-x-addon-symbolic"
+_DEFAULT_PLUGIN_CATEGORY_ICON = "sc-puzzle-symbolic"
 
 TRIGGER_LIBRARY: List[TriggerType] = []
 TRIGGER_BY_ID = {}

@@ -53,7 +53,7 @@ def param(key, label, type="text", default="", choices=None, placeholder="",
     )
 
 
-def action(id, name, run, icon="application-x-addon-symbolic", color="tile-purple",
+def action(id, name, run, icon="sc-puzzle-symbolic", color="tile-purple",
            category=None, params=None, control=None, required_command=None):
     """Describes one action for the library
     run receives params and ctx and returns the Previous Result or None"""
@@ -64,7 +64,7 @@ def action(id, name, run, icon="application-x-addon-symbolic", color="tile-purpl
     )
 
 
-def trigger(id, name, poll=None, icon="alarm-symbolic", color="tile-purple",
+def trigger(id, name, poll=None, icon="sc-alarm-symbolic", color="tile-purple",
             category=None, params=None, describe=None):
     """Describes one automation trigger kind like action
     poll receives state and params and returns fired and new state"""

@@ -5,6 +5,7 @@ from gi.repository import Gtk
 
 import action_library as lib
 import action_widgets as widgets
+import icons
 import runner
 from dialogs import show_confirm_dialog
 from models import Shortcut
@@ -116,6 +117,10 @@ class EditorWindow(Gtk.Window):
     def _save(self):
         self._resolved = True
         self.shortcut.name = self.name_entry.get_text().strip() or "Untitled Shortcut"
+        # There's no manual icon picker, so the tile always mirrors the first step
+        # (for Open App, that app's own icon).
+        self.shortcut.icon_name, self.shortcut.color_class = icons.auto_icon_for(
+            self.shortcut, lib.ACTION_BY_ID)
         self.on_save(self.shortcut)
         self.close()
 

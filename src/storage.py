@@ -11,16 +11,16 @@ DEFAULT_FOLDERS = ["Audio", "Display", "Session", "Power"]
 
 def _starter_shortcuts():
     starters = [
-        ("Volume Up", "system.volume_up", "audio-volume-high-symbolic", "tile-blue", "Audio"),
-        ("Volume Down", "system.volume_down", "audio-volume-low-symbolic", "tile-blue", "Audio"),
-        ("Mute", "system.mute", "audio-volume-muted-symbolic", "tile-blue", "Audio"),
-        ("Brightness Up", "system.brightness_up", "display-brightness-symbolic", "tile-yellow", "Display"),
-        ("Brightness Down", "system.brightness_down", "display-brightness-symbolic", "tile-yellow", "Display"),
-        ("Lock Screen", "system.lock_screen", "system-lock-screen-symbolic", "tile-gray", "Session"),
-        ("Sleep", "system.sleep", "weather-clear-night-symbolic", "tile-gray", "Session"),
-        ("Log Out", "system.log_out", "system-log-out-symbolic", "tile-orange", "Power"),
-        ("Restart", "system.restart", "system-reboot-symbolic", "tile-orange", "Power"),
-        ("Shut Down", "system.shutdown", "system-shutdown-symbolic", "tile-red", "Power"),
+        ("Volume Up", "system.volume_up", "sc-volume-up-symbolic", "tile-blue", "Audio"),
+        ("Volume Down", "system.volume_down", "sc-volume-down-symbolic", "tile-blue", "Audio"),
+        ("Mute", "system.mute", "sc-volume-mute-symbolic", "tile-blue", "Audio"),
+        ("Brightness Up", "system.brightness_up", "sc-brightness-up-symbolic", "tile-yellow", "Display"),
+        ("Brightness Down", "system.brightness_down", "sc-brightness-down-symbolic", "tile-yellow", "Display"),
+        ("Lock Screen", "system.lock_screen", "sc-lock-symbolic", "tile-gray", "Session"),
+        ("Sleep", "system.sleep", "sc-sleep-symbolic", "tile-gray", "Session"),
+        ("Log Out", "system.log_out", "sc-log-out-symbolic", "tile-orange", "Power"),
+        ("Restart", "system.restart", "sc-restart-symbolic", "tile-orange", "Power"),
+        ("Shut Down", "system.shutdown", "sc-power-symbolic", "tile-red", "Power"),
     ]
     result = []
     for name, action_id, icon, color, folder in starters:

@@ -69,7 +69,7 @@ class ActionInstance:
 
 
 class Shortcut:
-    def __init__(self, name, steps=None, icon_name="bolt-symbolic",
+    def __init__(self, name, steps=None, icon_name="sc-bolt-symbolic",
                  color_class="tile-blue", folder="My Shortcuts", confirm=False, uid=None):
         self.uid = uid or uuid.uuid4().hex[:8]
         self.name = name
@@ -95,7 +95,7 @@ class Shortcut:
         return cls(
             name=d["name"],
             steps=[ActionInstance.from_dict(s) for s in d.get("steps", [])],
-            icon_name=d.get("icon_name", "bolt-symbolic"),
+            icon_name=d.get("icon_name", "sc-bolt-symbolic"),
             color_class=d.get("color_class", "tile-blue"),
             folder=d.get("folder", "My Shortcuts"),
             confirm=d.get("confirm", False),

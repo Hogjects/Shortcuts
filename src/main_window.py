@@ -8,6 +8,7 @@ from gi.repository import Gdk, GLib, GObject, Gtk
 import action_library
 import automation_engine
 import automation_widgets
+import icons
 import plugin_manager
 import runner
 import storage
@@ -121,7 +122,7 @@ class MainWindow(Gtk.ApplicationWindow):
         plugins_btn.set_has_frame(False)
         plugins_btn.add_css_class("new-folder-button")
         plugins_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        plugins_icon = Gtk.Image.new_from_icon_name("application-x-addon-symbolic")
+        plugins_icon = icons.image("sc-puzzle-symbolic", 16)
         plugins_box.append(plugins_icon)
         plugins_box.append(Gtk.Label(label="Plugins"))
         plugins_btn.set_child(plugins_box)
@@ -141,21 +142,21 @@ class MainWindow(Gtk.ApplicationWindow):
             self.nav_list.remove(child)
             child = nxt
 
-        all_row = self._build_nav_row("view-grid-symbolic", "All Shortcuts", len(self.shortcuts), None)
+        all_row = self._build_nav_row("sc-grid-symbolic", "All Shortcuts", len(self.shortcuts), None)
         self.nav_list.append(all_row)
         self.nav_list.append(self._build_section_label_row("Folders"))
 
         row_to_select = all_row
         for folder_name in self.folders:
             count = sum(1 for s in self.shortcuts if s.folder == folder_name)
-            row = self._build_nav_row("folder-symbolic", folder_name, count, folder_name)
+            row = self._build_nav_row("sc-folder-symbolic", folder_name, count, folder_name)
             self.nav_list.append(row)
             if folder_name == select_category:
                 row_to_select = row
 
         self.nav_list.append(self._build_section_label_row("Automations"))
         automations_row = self._build_nav_row(
-            "emblem-synchronizing-symbolic", "Automations", len(self.automations), AUTOMATIONS_VIEW)
+            "sc-automation-symbolic", "Automations", len(self.automations), AUTOMATIONS_VIEW)
         self.nav_list.append(automations_row)
         if select_category == AUTOMATIONS_VIEW:
             row_to_select = automations_row
@@ -173,8 +174,7 @@ class MainWindow(Gtk.ApplicationWindow):
         box.set_margin_start(8)
         box.set_margin_end(8)
 
-        icon = Gtk.Image.new_from_icon_name(icon_name)
-        icon.set_pixel_size(18)
+        icon = icons.image(icon_name, 18)
         icon.add_css_class("sidebar-row-icon")
         box.append(icon)
 
@@ -508,8 +508,7 @@ class MainWindow(Gtk.ApplicationWindow):
         content.set_hexpand(True)
         content.set_vexpand(True)
 
-        icon = Gtk.Image.new_from_icon_name(shortcut.icon_name)
-        icon.set_pixel_size(26)
+        icon = icons.image(shortcut.icon_name, 26)
         icon.set_halign(Gtk.Align.START)
         icon.set_valign(Gtk.Align.START)
         content.append(icon)
@@ -529,7 +528,7 @@ class MainWindow(Gtk.ApplicationWindow):
         overlay.set_child(button)
 
         menu_button = Gtk.MenuButton()
-        menu_button.set_icon_name("view-more-symbolic")
+        icons.set_button_icon(menu_button, "sc-more-symbolic")
         menu_button.set_has_frame(False)
         menu_button.add_css_class("tile-menu-dot")
         menu_button.set_halign(Gtk.Align.END)
@@ -753,8 +752,7 @@ class MainWindow(Gtk.ApplicationWindow):
         content.set_hexpand(True)
         content.set_vexpand(True)
 
-        icon = Gtk.Image.new_from_icon_name(automation_widgets.trigger_icon_name(automation.trigger_type))
-        icon.set_pixel_size(26)
+        icon = icons.image(automation_widgets.trigger_icon_name(automation.trigger_type), 26)
         icon.set_halign(Gtk.Align.START)
         icon.set_valign(Gtk.Align.START)
         content.append(icon)
@@ -781,7 +779,7 @@ class MainWindow(Gtk.ApplicationWindow):
         overlay.set_child(button)
 
         menu_button = Gtk.MenuButton()
-        menu_button.set_icon_name("view-more-symbolic")
+        icons.set_button_icon(menu_button, "sc-more-symbolic")
         menu_button.set_has_frame(False)
         menu_button.add_css_class("tile-menu-dot")
         menu_button.set_halign(Gtk.Align.END)
