@@ -17,7 +17,11 @@ gi.require_version("Gtk", "4.0")
 from gi.repository import Gdk, Gio, Gtk
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Packaged builds copy the icons next to the code (app/icons)
+# Running from the source tree they live one level up, beside src/
 ICON_ROOT = os.path.join(BASE_DIR, "icons")
+if not os.path.isdir(ICON_ROOT):
+    ICON_ROOT = os.path.join(os.path.dirname(BASE_DIR), "icons")
 _ICON_DIR = os.path.join(ICON_ROOT, "hicolor", "scalable", "actions")
 
 APP_PREFIX = "app:"
