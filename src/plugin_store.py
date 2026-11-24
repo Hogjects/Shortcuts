@@ -19,7 +19,7 @@ import plugin_manager
 # SHORTCUTS_CATALOG_URL is for testing against a local server
 CATALOG_BASE_URL = os.environ.get(
     "SHORTCUTS_CATALOG_URL",
-    "https://raw.githubusercontent.com/Hogjects/Shortcuts/dist",
+    "https://raw.githubusercontent.com/hogjects/shortcuts-plugins/dist",
 ).rstrip("/")
 
 _TIMEOUT_SECONDS = 15
