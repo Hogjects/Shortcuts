@@ -1,2 +1,3 @@
 # Shortcuts
-notification test 
+early beta test, more documentation coming soon
+
