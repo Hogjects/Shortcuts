@@ -1,0 +1,550 @@
+@define-color sidebar_bg #eeeef3;
+@define-color page_bg #f5f5f8;
+@define-color card_bg #ffffff;
+@define-color heading_text #1c1c1e;
+@define-color muted_text #86868f;
+@define-color divider_color #e1e1e8;
+@define-color accent #3a7dff;
+
+window {
+  background-color: @page_bg;
+}
+
+/* Force light styling on generic widgets so a dark system theme
+   cannot leave black backgrounds or white text showing through */
+
+popover, popover.background, popover contents {
+  background-color: @card_bg;
+  color: @heading_text;
+  border-radius: 12px;
+  border: 1px solid @divider_color;
+  box-shadow: 0 8px 24px alpha(#000000, 0.16);
+}
+
+dialog, dialog .background, window.background {
+  background-color: @card_bg;
+  color: @heading_text;
+}
+
+entry, spinbutton, dropdown, dropdown button, dropdown popover,
+dropdown listview, dropdown list, list, listview {
+  background-color: @card_bg;
+  color: @heading_text;
+  border: 1px solid @divider_color;
+}
+
+entry:focus, spinbutton:focus, dropdown:focus, dropdown button:focus {
+  border-color: @accent;
+  box-shadow: 0 0 0 2px alpha(@accent, 0.25);
+}
+
+label {
+  color: @heading_text;
+}
+
+tooltip {
+  background-color: @heading_text;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+separator {
+  background-color: @divider_color;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+.suggested-action {
+  background-image: linear-gradient(180deg, #4a8bff, #2f6df0);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  transition: background-color 120ms ease, transform 80ms ease;
+}
+
+.suggested-action:hover {
+  background-image: linear-gradient(180deg, #5c96ff, #3d78f5);
+}
+
+.suggested-action:active {
+  transform: scale(0.97);
+}
+
+/* Sidebar */
+
+.sidebar {
+  background-color: @sidebar_bg;
+  padding: 18px 10px 10px 10px;
+  border-right: 1px solid @divider_color;
+}
+
+.sidebar-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: @heading_text;
+  margin: 2px 10px 16px 10px;
+}
+
+.sidebar-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: @muted_text;
+  margin: 14px 10px 4px 10px;
+}
+
+.nav-list, .nav-list row {
+  background: transparent;
+}
+
+.nav-list row {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  margin: 1px 4px;
+}
+
+.sidebar-row {
+  border-radius: 9px;
+  color: @heading_text;
+  font-size: 14px;
+  transition: background-color 100ms ease;
+}
+
+.sidebar-row:hover {
+  background-color: alpha(#000000, 0.05);
+}
+
+.sidebar-row:selected,
+.nav-list row:selected .sidebar-row {
+  background-color: @card_bg;
+  box-shadow: 0 1px 3px alpha(#000000, 0.14), 0 0 0 1px @divider_color;
+}
+
+.sidebar-row-drop-target {
+  background-color: alpha(@accent, 0.12);
+  box-shadow: 0 0 0 1px alpha(@accent, 0.4);
+}
+
+.folder-row-dragging {
+  opacity: 0.45;
+}
+
+.sidebar-row-icon {
+  color: @accent;
+}
+
+.nav-count {
+  color: @muted_text;
+  font-size: 13px;
+}
+
+.new-folder-button {
+  color: @accent;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 8px 6px 2px 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background-color 100ms ease;
+}
+
+.new-folder-button:hover {
+  background-color: alpha(@accent, 0.1);
+}
+
+/* Content area */
+
+.content-area {
+  background-color: @page_bg;
+}
+
+.page-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: @heading_text;
+  margin-bottom: 18px;
+}
+
+.section-header {
+  color: @heading_text;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 4px 0 12px 0;
+}
+
+.section-header image {
+  color: @muted_text;
+}
+
+.content-search {
+  min-width: 220px;
+  border-radius: 10px;
+}
+
+.new-shortcut-button {
+  background-image: linear-gradient(180deg, #4a8bff, #2f6df0);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 6px alpha(@accent, 0.35);
+  transition: background-color 120ms ease, transform 80ms ease;
+}
+
+.new-shortcut-button:hover {
+  background-image: linear-gradient(180deg, #5c96ff, #3d78f5);
+}
+
+.new-shortcut-button:active {
+  transform: scale(0.97);
+}
+
+.empty-state {
+  color: @muted_text;
+  font-size: 15px;
+  margin-top: 32px;
+}
+
+/* Shortcut tiles */
+
+.shortcut-tile {
+  border-radius: 20px;
+  padding: 0;
+  color: #ffffff;
+  transition: background-color 150ms ease, transform 100ms ease, box-shadow 150ms ease;
+  box-shadow: 0 4px 10px alpha(#000000, 0.18), inset 0 1px 0 alpha(#ffffff, 0.22);
+}
+
+.shortcut-tile:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 18px alpha(#000000, 0.24), inset 0 1px 0 alpha(#ffffff, 0.22);
+}
+
+.shortcut-tile:active {
+  transform: scale(0.96);
+}
+
+.shortcut-tile-dragging {
+  opacity: 0.45;
+}
+
+.shortcut-tile-drop-target {
+  box-shadow: 0 0 0 3px alpha(#ffffff, 0.85), 0 4px 10px alpha(#000000, 0.18);
+}
+
+.tile-content {
+  padding: 14px;
+}
+
+.shortcut-tile image {
+  color: #ffffff;
+}
+
+.tile-label {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tile-menu-dot {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  margin: 10px;
+  border-radius: 999px;
+  background-color: alpha(#ffffff, 0.24);
+  color: alpha(#ffffff, 0.95);
+  transition: background-color 100ms ease;
+}
+
+.tile-menu-dot:hover {
+  background-color: alpha(#ffffff, 0.4);
+}
+
+.tile-menu-dot image {
+  -gtk-icon-size: 14px;
+}
+
+.popover-menu-item {
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 80ms ease;
+}
+
+.popover-menu-item:hover {
+  background-color: alpha(@accent, 0.1);
+}
+
+.tile-blue {
+  background-image: linear-gradient(180deg, #4a8bff, #2f6df0);
+}
+.tile-blue:hover {
+  background-image: linear-gradient(180deg, #5c96ff, #3d78f5);
+}
+
+.tile-yellow {
+  background-image: linear-gradient(180deg, #f0a821, #d9970a);
+}
+.tile-yellow:hover {
+  background-image: linear-gradient(180deg, #f5b53a, #e4a318);
+}
+
+.tile-gray {
+  background-image: linear-gradient(180deg, #7d7d85, #63636b);
+}
+.tile-gray:hover {
+  background-image: linear-gradient(180deg, #8a8a91, #707078);
+}
+
+.tile-orange {
+  background-image: linear-gradient(180deg, #ff9a4d, #ff8017);
+}
+.tile-orange:hover {
+  background-image: linear-gradient(180deg, #ffa860, #ff8c28);
+}
+
+.tile-red {
+  background-image: linear-gradient(180deg, #ff5c52, #ff3b30);
+}
+.tile-red:hover {
+  background-image: linear-gradient(180deg, #ff6d64, #ff4c41);
+}
+
+.tile-teal {
+  background-image: linear-gradient(180deg, #35c2b0, #1ea593);
+}
+.tile-teal:hover {
+  background-image: linear-gradient(180deg, #47cdbb, #2bb09e);
+}
+
+.tile-purple {
+  background-image: linear-gradient(180deg, #9d6cf0, #7f45e0);
+}
+.tile-purple:hover {
+  background-image: linear-gradient(180deg, #a97cf3, #8c55e6);
+}
+
+/* Shortcut editor */
+
+.editor-header {
+  background-color: @sidebar_bg;
+  border-bottom: 1px solid @divider_color;
+}
+
+.editor-name-entry {
+  font-size: 18px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.editor-canvas-area {
+  background-color: #eaeaef;
+}
+
+.canvas-drop-active {
+  background-color: alpha(@accent, 0.06);
+}
+
+.library-panel {
+  background-color: @sidebar_bg;
+  border-right: 1px solid @divider_color;
+}
+
+.library-row {
+  border-radius: 8px;
+  color: @heading_text;
+  transition: background-color 100ms ease;
+}
+
+.library-row:hover {
+  background-color: alpha(#000000, 0.05);
+}
+
+.library-row-swatch {
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 7px;
+  color: #ffffff;
+}
+
+.library-row-swatch image {
+  color: #ffffff;
+}
+
+.library-row-unavailable {
+  opacity: 0.45;
+}
+
+.add-action-button {
+  color: @accent;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background-color: alpha(@accent, 0.08);
+  border: 1px dashed alpha(@accent, 0.4);
+  transition: background-color 100ms ease;
+}
+
+.add-action-button:hover {
+  background-color: alpha(@accent, 0.14);
+}
+
+/* Step cards */
+
+.step-card {
+  border-radius: 16px;
+  padding: 12px 14px;
+  color: #ffffff;
+  box-shadow: 0 3px 8px alpha(#000000, 0.18), inset 0 1px 0 alpha(#ffffff, 0.15);
+  transition: opacity 120ms ease, box-shadow 120ms ease;
+}
+
+.step-card-dragging {
+  opacity: 0.45;
+}
+
+.step-card-unavailable {
+  opacity: 0.5;
+}
+
+.step-card-drop-target {
+  box-shadow: 0 0 0 3px alpha(#ffffff, 0.85), 0 3px 8px alpha(#000000, 0.2);
+}
+
+.step-title {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.step-drag-handle {
+  color: alpha(#ffffff, 0.55);
+}
+
+.step-drag-handle:hover {
+  color: alpha(#ffffff, 0.9);
+}
+
+.step-icon-button {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  border-radius: 999px;
+  color: alpha(#ffffff, 0.9);
+  transition: background-color 100ms ease;
+}
+
+.step-icon-button:hover {
+  background-color: alpha(#ffffff, 0.18);
+}
+
+.param-row {
+  padding: 2px 0;
+}
+
+.param-label {
+  color: alpha(#ffffff, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.option-row-label {
+  color: @heading_text;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.param-row entry,
+.param-row spinbutton {
+  background-color: alpha(#ffffff, 0.92);
+  color: @heading_text;
+  border-radius: 8px;
+  border: none;
+  min-height: 26px;
+  padding: 2px 8px;
+}
+
+.param-row dropdown {
+  border-radius: 8px;
+  min-height: 26px;
+  border: none;
+}
+
+.param-row dropdown button {
+  background-color: alpha(#ffffff, 0.92);
+  color: @heading_text;
+  border-radius: 8px;
+  border: none;
+}
+
+.variable-chip {
+  background-color: alpha(#ffffff, 0.92);
+  color: #2f6df0;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 10px;
+  border: none;
+}
+
+.variable-toggle {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border-radius: 999px;
+  color: alpha(#ffffff, 0.9);
+  transition: background-color 100ms ease;
+}
+
+.variable-toggle:hover {
+  background-color: alpha(#ffffff, 0.18);
+}
+
+.branch-label {
+  color: alpha(#ffffff, 0.85);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.branch-end-label {
+  color: alpha(#ffffff, 0.7);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.branch-box {
+  background-color: alpha(#000000, 0.14);
+  border-radius: 12px;
+  padding: 10px;
+  border-left: 3px solid alpha(#ffffff, 0.4);
+}
+
+.branch-box .add-action-button {
+  color: #ffffff;
+  background-color: alpha(#ffffff, 0.14);
+  border: 1px dashed alpha(#ffffff, 0.4);
+}
+
+.branch-box .add-action-button:hover {
+  background-color: alpha(#ffffff, 0.22);
+}
+
+/* Automation tiles */
+
+.tile-sublabel {
+  color: alpha(#ffffff, 0.85);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tile-disabled {
+  opacity: 0.5;
+}
